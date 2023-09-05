@@ -17,7 +17,6 @@ class CurrentUserSerializer
         token_expiration: @current_user.token_expiration,
         cash_balance: @current_user.cash_balance
       }
-      end
     }
   end
 end

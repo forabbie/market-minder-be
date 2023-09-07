@@ -1,15 +1,24 @@
 class Api::V1::UsersController < ApplicationController
   before_action :check_authentication
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  # before_action :require_same_user, only: [:edit, :update, :destroy]
   
   def index
     @users = User.all
     render json: UsersSerializer.new(@users).as_json
   end
 
-  def show
-    render json: @user
+  def deposit_cash
+    @user = User.find(current_user.id)
+    @fund = @user.fund
+    if @user.nil?
+      render json: { error: "User not found" }, status: :not_found
+    else
+      if @user.deposit_cash!(params[:fund])
+        render json: { rowAffected: 1 }
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
+    end
   end
 
   def create
@@ -39,9 +48,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   private
-
   def user_params
-    params.require(:user).permit(:email, :password, :role)
+    params.require(:user).permit(:email, :password, :role, :account_status)
   end
 
   def set_user

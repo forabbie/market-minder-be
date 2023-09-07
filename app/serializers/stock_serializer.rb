@@ -10,7 +10,7 @@ class StockSerializer
       "stock": {
         symbol: @stock.symbol,
         company_name: @stock.company_name,
-        current_price: @stock.current_price
+        last_price: @stock.last_price
       }
     }
   end

@@ -18,5 +18,4 @@ class ApplicationController < ActionController::API
   def unauthorized
     render json: { user: "unauthorized" }, status: 422
   end
-
 end

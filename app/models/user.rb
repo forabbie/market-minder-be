@@ -1,5 +1,8 @@
 require "securerandom"
 class User < ApplicationRecord
+  has_many :stocks
+  has_many :transactions, through: :stocks
+  
   before_save { self.email = email.downcase }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -50,5 +53,29 @@ class User < ApplicationRecord
 
   def user?
     self.role == "trader"
+  end
+
+  def insufficient_balance?(transaction_params)
+    self.fund < total_price(transaction_params)
+  end
+
+  def deduct_balance!(transaction_params)
+    self.fund -= total_price(transaction_params)
+    self.save
+  end
+
+  def add_balance!(transaction_params)
+    self.fund += total_price(transaction_params)
+    self.save
+  end
+
+  def deposit_cash!(amount)
+    self.fund += amount.to_d
+    self.save
+  end
+
+  private
+  def total_price(transaction_params)
+    transaction_params[:shares_quantity].to_d * transaction_params[:price].to_d
   end
 end

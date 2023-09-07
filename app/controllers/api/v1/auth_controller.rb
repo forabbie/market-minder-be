@@ -3,7 +3,6 @@ class Api::V1::AuthController < ApplicationController
   
   def signup
     @user = User.new(signup_params)
-
     if @user.verify_password(signup_params[:password], signup_params[:password_confirmation])
       @user.generate_token
       if @user.save
@@ -38,7 +37,7 @@ class Api::V1::AuthController < ApplicationController
 
   private
   def signup_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation, :account_status, :role)
   end
 
   def signin_params

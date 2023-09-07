@@ -10,16 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_124929) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_07_024043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "stocks", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.string "symbol"
     t.string "company_name"
-    t.decimal "current_price"
+    t.decimal "last_price"
+    t.decimal "shares_quantity", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_stocks_on_user_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.decimal "shares_quantity", default: "0.0", null: false
+    t.decimal "price", default: "0.0", null: false
+    t.decimal "total_price", default: "0.0", null: false
+    t.string "transaction_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stock_id"], name: "index_transactions_on_stock_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,11 +43,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_124929) do
     t.string "password_digest"
     t.string "account_status", default: "pending", null: false
     t.string "role", default: "trader", null: false
+    t.decimal "fund", default: "0.0", null: false
     t.string "token"
     t.datetime "token_expiration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "cash_balance", default: 0.0, null: false
   end
 
+  add_foreign_key "stocks", "users"
+  add_foreign_key "transactions", "stocks"
 end

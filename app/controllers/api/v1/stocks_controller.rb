@@ -1,4 +1,5 @@
 class Api::V1::StocksController < ApplicationController
+  before_action :check_authentication
 
   def index
     page = params[:page] || 1
@@ -27,10 +28,21 @@ class Api::V1::StocksController < ApplicationController
       if @stock
         render json: StockSerializer.new(@stock).as_json
       else
-        render json: "Please enter a valid symbol to search", status: 422
+        render json: {error: "Please enter a valid symbol to search"}, status: 422
       end   
     else
-      render json: "Please enter a symbol to search", status: 422
+      render json: {error: "Please enter a symbol to search"}, status: 422
     end
   end
+
+  def local_stocks
+    stocks = Stock.all
+    render json: { stocks: stocks }
+  end
+
+  def user_portfolio
+    stocks = Stock.where(user_id: current_user.id).where('shares_quantity > 0')
+    render json: { stocks: stocks }
+  end
+
 end

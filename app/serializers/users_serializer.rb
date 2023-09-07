@@ -11,7 +11,6 @@ class UsersSerializer
       {
         id: user.id,
         email: user.email,
-        # password_digest: user.password_digest,
         account_status: user.account_status,
         role: user.role,
       }

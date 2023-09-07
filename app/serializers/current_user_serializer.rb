@@ -15,7 +15,7 @@ class CurrentUserSerializer
         account_status: @current_user.account_status,
         role: @current_user.role,
         token_expiration: @current_user.token_expiration,
-        cash_balance: @current_user.cash_balance
+        fund: @current_user.fund
       }
     }
   end

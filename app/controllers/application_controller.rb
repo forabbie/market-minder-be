@@ -4,10 +4,16 @@ class ApplicationController < ActionController::API
 
     if @current_user = User.find_by_token(token)
       if @current_user.token_expired?
-        render json: { token: "expired" }
+        render json: { response: "token expired" }
       end
     else
-      render json: { user: "not found" }
+      render json: { response: "not found" }
+    end
+  end
+  
+  def restrict_pendding_accounts
+    if @current_user.account_status === "pending"
+      render json: { response: "Your account is currently in a pending status." }
     end
   end
 
@@ -16,6 +22,6 @@ class ApplicationController < ActionController::API
   end
 
   def unauthorized
-    render json: { user: "unauthorized" }, status: 422
+    render json: { response: "unauthorized" }, status: 422
   end
 end

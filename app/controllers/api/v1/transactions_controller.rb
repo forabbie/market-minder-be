@@ -1,5 +1,6 @@
 class Api::V1::TransactionsController < ApplicationController
   before_action :check_authentication
+  before_action :restrict_pendding_accounts, only:[:create, :return_user_transactions]
 
   #return all transactions
   def index

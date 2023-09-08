@@ -15,8 +15,9 @@ Rails.application.routes.draw do
       get '/stocks/portfolio' => 'stocks#user_portfolio' # list all users available stocks
       
       # users/traders
-      patch '/users/deposit', to: 'users#deposit_cash'
       get '/users/transactions', to: 'transactions#return_user_transactions'
+      get '/users/:status', to: 'users#index', constraints: { status: /(pending|approved)/ }
+      patch '/users/deposit', to: 'users#deposit_cash'
 
       get '/transactions', to: 'transactions#index'
       post '/transactions', to: 'transactions#create'

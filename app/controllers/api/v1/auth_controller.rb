@@ -6,6 +6,7 @@ class Api::V1::AuthController < ApplicationController
     if @user.verify_password(signup_params[:password], signup_params[:password_confirmation])
       @user.generate_token
       if @user.save
+        AuthMailer.pending_email(@user).deliver_later
         render json: { token: @user.token  }
       else
         render json: @user.errors, status: 422
@@ -37,7 +38,7 @@ class Api::V1::AuthController < ApplicationController
 
   private
   def signup_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :account_status, :role)
+    params.require(:user).permit(:email, :password, :password_confirmation)
   end
 
   def signin_params

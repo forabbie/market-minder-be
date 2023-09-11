@@ -18,7 +18,7 @@ class Api::V1::StocksController < ApplicationController
     }
   end
 
-  def top_active_stocks
+  def top_stocks
     render json: Stock.top_active_stocks
   end
 

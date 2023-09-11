@@ -26,7 +26,6 @@ class Stock < ApplicationRecord
   def self.top_active_stocks # return top 10 active stocks
     client = IEX::Api::Client.new(IEX_API_OPTIONS)
     active_stocks = client.stock_market_list(:mostactive).sort_by(&:latest_volume).reverse
-    { active_stocks: active_stocks.first(10) }
   end
 
   def self.total_available_stocks_count

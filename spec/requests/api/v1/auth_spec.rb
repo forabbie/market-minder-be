@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Auths", type: :request do
-  let(:user) { create :user }
-  let(:params) do
-    {
-      email: user.email,
-      password: user.password
-    }
-  end
-
   describe 'POST /signup' do
     it 'creates a new user and returns a token' do
       post '/api/v1/auth/signup', params: {
@@ -36,7 +28,6 @@ RSpec.describe "Api::V1::Auths", type: :request do
     end
   end
 
-
   describe 'GET /current' do
     it 'returns a success response if the token is valid' do
       user = FactoryBot.create(:user)
@@ -49,7 +40,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
     end
 
     it 'returns an error response if the token is expired' do
-      user = FactoryBot.create(:user, token_expiration: 1.week.ago)
+      user = FactoryBot.create(:user)
       user.generate_token
       user.save
       user.update(token_expiration: 1.week.ago)

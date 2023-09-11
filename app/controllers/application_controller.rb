@@ -4,10 +4,10 @@ class ApplicationController < ActionController::API
 
     if @current_user = User.find_by_token(token)
       if @current_user.token_expired?
-        render json: { response: "token expired" }
+        render json: { response: "token expired" }, status: 401
       end
     else
-      render json: { response: "not found" }
+      render json: { response: "not found" }, status: 401
     end
   end
   
